@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clínica Vida+ | Projeto Integrador Acadêmico</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Barra de Navegação Superior -->
+  <header class="topbar no-print">
+    <div class="container topbar-inner">
+      <div class="brand">
+        <span class="brand-badge">+</span>
+        <div>
+          <strong>Clínica Vida+</strong>
+          <small>Projeto Acadêmico Integrado</small>
+        </div>
+      </div>
+
+      <nav class="nav-links" aria-label="Navegação Principal">
+        <a href="#capa">Capa</a>
+        <a href="#passo1">1. Kanban Ágil</a>
+        <a href="#passo2">2. Sistema Python</a>
+        <a href="#passo3">3. Lógica</a>
+        <a href="#passo4">4. Fila FIFO</a>
+        <a href="#passo5">5. UML</a>
+        <a href="#conclusao">Conclusão</a>
+      </nav>
+
+      <div class="topbar-actions">
+        <button id="btnDownloadPyTop" class="btn btn-outline" title="Baixar clinica_vida.py">
+          Baixar .py
+        </button>
+        <button id="btnExportFullReport" class="btn btn-outline" title="Exportar Relatório Completo">
+          Exportar Relatório
+        </button>
+        <button id="btnPrint" class="btn btn-primary" title="Imprimir ou Salvar PDF">
+          Imprimir / PDF
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- CAPA ACADÊMICA, INTRODUÇÃO E OBJETIVOS -->
+    <section id="capa" class="card cover-section">
+      <div class="cover-header">
+        <span class="pill">PROJETO ACADÊMICO INTERDISCIPLINAR</span>
+        <h1>Clínica Vida+</h1>
+        <p class="subtitle">
+          Solução Integrada de Gestão de Atendimento, Engenharia de Software Ágil, Lógica Computacional e Modelagem de Sistemas
+        </p>
+      </div>
+
+      <div class="cover-meta">
+        <div><strong>Instituição:</strong> Curso Superior de Tecnologia em Análise e Desenvolvimento de Sistemas</div>
+        <div><strong>Projeto:</strong> Sistema de Apoio Operacional — Clínica Vida+</div>
+        <div><strong>Escopo:</strong> Gestão Ágil, Python CLI, Lógica Proposicional, Estrutura FIFO e UML</div>
+      </div>
+
+      <div class="grid-2 mt-20">
+        <div class="info-box">
+          <h3>Introdução</h3>
+          <p>
+            O crescimento da demanda por atendimentos ambulatoriais exige clínicas médicas estruturadas com processos ágeis, controle confiável de cadastros, regras claras de triagem e fluxos bem definidos entre recepção e corpo clínico. Este trabalho apresenta a concepção e prototipação técnica da <strong>Clínica Vida+</strong>, integrando metodologias ágeis, programação estruturada em Python, lógica matemática aplicada à triagem, filas de atendimento e modelagem UML.
+          </p>
+        </div>
+
+        <div class="info-box">
+          <h3>Objetivos do Projeto</h3>
+          <ul class="clean-list">
+            <li><strong>Gestão Ágil:</strong> Organizar o desenvolvimento em sprints com quadro Kanban interativo e relatórios de retrospectiva.</li>
+            <li><strong>Automação em Python:</strong> Desenvolver o sistema executável <code>clinica_vida.py</code> para cadastro e estatísticas de pacientes.</li>
+            <li><strong>Lógica de Triagem:</strong> Validar formalmente regras de liberação para consultas normais e emergências via tabelas-verdade.</li>
+            <li><strong>Estrutura de Dados:</strong> Implementar algoritmo FIFO para organização da ordem de chamada de pacientes.</li>
+            <li><strong>Modelagem UML:</strong> Representar atores, casos de uso e dependências obrigatórias (<code>&lt;&lt;include&gt;&gt;</code>).</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- PASSO 1: QUADRO KANBAN ÁGIL -->
+    <section id="passo1" class="card">
+      <div class="section-header">
+        <div>
+          <span class="step-badge">PASSO 1</span>
+          <h2>Gestão Ágil de Projetos (Quadro Estilo Trello)</h2>
+        </div>
+        <div class="section-controls no-print">
+          <label for="sprintSelect"><strong>Selecionar Sprint:</strong></label>
+          <select id="sprintSelect" class="input-control">
+            <option value="sprint1">Sprint 1 — Planejamento e Núcleo Python</option>
+            <option value="sprint2">Sprint 2 — Lógica, Filas e Modelagem UML</option>
+          </select>
+          <button id="btnOpenTaskModal" class="btn btn-primary">+ Nova Tarefa</button>
+          <button id="btnExportSprintReport" class="btn btn-outline">Exportar Relatório da Sprint</button>
+        </div>
+      </div>
+
+      <!-- Painel de Informações da Sprint -->
+      <div id="sprintSummaryBox" class="sprint-banner"></div>
+
+      <!-- Quadro Kanban -->
+      <div class="kanban-board" id="kanbanBoard">
+        <div class="kanban-col" data-status="backlog">
+          <div class="col-header">
+            <h3>Backlog</h3>
+            <span class="count-badge" id="count-backlog">0</span>
+          </div>
+          <div class="col-tasks" id="col-backlog"></div>
+        </div>
+
+        <div class="kanban-col" data-status="sprint">
+          <div class="col-header">
+            <h3>Sprint Atual</h3>
+            <span class="count-badge" id="count-sprint">0</span>
+          </div>
+          <div class="col-tasks" id="col-sprint"></div>
+        </div>
+
+        <div class="kanban-col" data-status="progress">
+          <div class="col-header">
+            <h3>Em Progresso</h3>
+            <span class="count-badge" id="count-progress">0</span>
+          </div>
+          <div class="col-tasks" id="col-progress"></div>
+        </div>
+
+        <div class="kanban-col" data-status="done">
+          <div class="col-header">
+            <h3>Concluído</h3>
+            <span class="count-badge" id="count-done">0</span>
+          </div>
+          <div class="col-tasks" id="col-done"></div>
+        </div>
+      </div>
+
+      <!-- Relatório da Sprint -->
+      <div class="report-box mt-20" id="sprintReportContainer"></div>
+
+      <!-- Instruções para replicar no Trello real -->
+      <details class="trello-guide mt-20 no-print">
+        <summary><strong>Integração: Como criar este quadro no Trello real</strong></summary>
+        <div class="mt-10">
+          <p>Este quadro foi implementado localmente nesta aplicação para demonstração interativa. Caso deseje hospedá-lo no Trello oficial:</p>
+          <ol class="ordered-list">
+            <li>Acesse <a href="https://trello.com" target="_blank" rel="noopener noreferrer">trello.com</a> e faça login na sua conta gratuita.</li>
+            <li>Clique em <strong>Criar &rarr; Criar quadro</strong> e nomeie como <code>Clínica Vida+ — Gestão Ágil</code>.</li>
+            <li>Crie exatamente quatro listas: <strong>Backlog</strong>, <strong>Sprint Atual</strong>, <strong>Em Progresso</strong> e <strong>Concluído</strong>.</li>
+            <li>Adicione os cartões acima utilizando etiquetas por Sprint, datas de entrega e o recurso nativo de <em>Checklist</em>.</li>
+          </ol>
+        </div>
+      </details>
+    </section>
+
+    <!-- PASSO 2: SISTEMA PYTHON (clinica_vida.py) -->
+    <section id="passo2" class="card">
+      <div class="section-header">
+        <div>
+          <span class="step-badge">PASSO 2</span>
+          <h2>Sistema de Cadastro de Pacientes em Python (<code>clinica_vida.py</code>)</h2>
+        </div>
+        <div class="section-controls no-print">
+          <button id="btnCopyPy" class="btn btn-outline">Copiar Código</button>
+          <button id="btnDownloadPy" class="btn btn-primary">Baixar clinica_vida.py</button>
+        </div>
+      </div>
+
+      <p class="mb-15">
+        O arquivo executável <code>clinica_vida.py</code> utiliza <strong>listas e dicionários</strong> em Python puro, oferecendo menu interativo em loop com tratamento de exceções (<code>ValueError</code>), validação de campos vazios, verificação de lista vazia e cálculos estatísticos automáticos.
+      </p>
+
+      <div class="grid-2-1">
+        <div class="code-container">
+          <div class="code-header">
+            <span>clinica_vida.py</span>
+            <span>Python 3.x • UTF-8</span>
+          </div>
+          <pre><code id="pythonCodeDisplay"></code></pre>
+        </div>
+
+        <div class="info-box">
+          <h3>Requisitos Atendidos</h3>
+          <ul class="clean-list">
+            <li><strong>Menu em Loop:</strong> Opções 1 a 5 com validação de escolha.</li>
+            <li><strong>Estrutura de Dados:</strong> Lista principal armazenando dicionários com chaves <code>nome</code>, <code>idade</code> e <code>telefone</code>.</li>
+            <li><strong>Estatísticas:</strong> Total cadastrado, idade média, paciente mais novo e mais velho.</li>
+            <li><strong>Tratamento de Erros:</strong> Impede idades negativas/não numéricas, trata lista vazia e busca parcial case-insensitive sem resultados.</li>
+          </ul>
+          <div class="terminal-box mt-15">
+            <strong>Execução no Terminal:</strong>
+            <code>python clinica_vida.py</code>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PASSO 3: LÓGICA PROPOSICIONAL E TABELAS-VERDADE -->
+    <section id="passo3" class="card">
+      <div class="section-header">
+        <div>
+          <span class="step-badge">PASSO 3</span>
+          <h2>Lógica Proposicional e Tabelas-Verdade de Triagem</h2>
+        </div>
+      </div>
+
+      <div class="variables-grid">
+        <div class="var-card"><strong>A</strong> = Tem agendamento</div>
+        <div class="var-card"><strong>B</strong> = Documentos válidos</div>
+        <div class="var-card"><strong>C</strong> = Médico disponível</div>
+        <div class="var-card"><strong>D</strong> = Pagamentos em dia</div>
+      </div>
+
+      <div class="grid-2 mt-15">
+        <div class="formula-box">
+          <h3>Modalidade 1: Consulta Normal</h3>
+          <p class="formula">P<sub>normal</sub> = (A &and; B &and; C) &or; (B &and; C &and; D)</p>
+          <p>Situações em que o atendimento é liberado: <strong class="highlight-green" id="countNormalTrue">3 de 16 (18,75%)</strong></p>
+        </div>
+        <div class="formula-box">
+          <h3>Modalidade 2: Emergência</h3>
+          <p class="formula">P<sub>emergência</sub> = C &and; (B &or; D)</p>
+          <p>Situações em que o atendimento é liberado: <strong class="highlight-green" id="countEmergencyTrue">6 de 16 (37,50%)</strong></p>
+        </div>
+      </div>
+
+      <!-- Simulador Interativo de Proposições -->
+      <div class="simulator-box mt-20 no-print">
+        <h3>Simulador Interativo de Triagem (Teste qualquer combinação)</h3>
+        <div class="toggle-row">
+          <button class="logic-toggle active" data-var="A">A (Agendamento): <span>V</span></button>
+          <button class="logic-toggle active" data-var="B">B (Documentos): <span>V</span></button>
+          <button class="logic-toggle active" data-var="C">C (Médico): <span>V</span></button>
+          <button class="logic-toggle active" data-var="D">D (Pagamentos): <span>V</span></button>
+          <button id="btnSetSpecificCase" class="btn btn-outline">Aplicar Caso A=F, B=V, C=V, D=F</button>
+        </div>
+        <div id="simulatorResult" class="sim-output mt-10"></div>
+      </div>
+
+      <!-- Análise Obrigatória do Caso Específico -->
+      <div class="case-analysis mt-20">
+        <h3>Análise Detalhada do Caso: A = F, B = V, C = V, D = F</h3>
+        <p>
+          <strong>Cenário:</strong> O paciente comparece sem agendamento prévio (<code>A = F</code>) e com pendência financeira (<code>D = F</code>), porém apresenta documentos válidos (<code>B = V</code>) e há médico disponível (<code>C = V</code>).
+        </p>
+        <ul class="clean-list mt-10">
+          <li>
+            <strong>Consulta Normal:</strong> <code>(F &and; V &and; V) &or; (V &and; V &and; F) = F &or; F = <strong>F (NEGADO)</strong></code>.
+            <br /><em>Justificativa:</em> Ambas as cláusulas exigem <code>B</code> e <code>C</code> verdadeiros combinados com <code>A</code> ou <code>D</code> verdadeiro. Como tanto o agendamento quanto os pagamentos são falsos, a consulta normal não é autorizada.
+          </li>
+          <li>
+            <strong>Emergência:</strong> <code>V &and; (V &or; F) = V &and; V = <strong>V (LIBERADO)</strong></code>.
+            <br /><em>Justificativa:</em> Na emergência, exige-se médico disponível (<code>C = V</code>) e ao menos documentos válidos ou pagamentos em dia (<code>B &or; D</code>). Como <code>B = V</code> torna a disjunção verdadeira, o atendimento emergencial é liberado imediatamente.
+          </li>
+        </ul>
+      </div>
+
+      <!-- Duas Tabelas-Verdade Completas (16 combinações cada) -->
+      <div class="grid-2 mt-20">
+        <div>
+          <h3>Tabela-Verdade 1: Consulta Normal (16 Combinações)</h3>
+          <div class="table-responsive">
+            <table class="truth-table" id="tableNormal">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>A</th>
+                  <th>B</th>
+                  <th>C</th>
+                  <th>D</th>
+                  <th>A&and;B&and;C</th>
+                  <th>B&and;C&and;D</th>
+                  <th>Resultado</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div>
+          <h3>Tabela-Verdade 2: Emergência (16 Combinações)</h3>
+          <div class="table-responsive">
+            <table class="truth-table" id="tableEmergency">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>A</th>
+                  <th>B</th>
+                  <th>C</th>
+                  <th>D</th>
+                  <th>B&or;D</th>
+                  <th>C&and;(B&or;D)</th>
+                  <th>Resultado</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PASSO 4: ESTRUTURA DE DADOS — FILA FIFO -->
+    <section id="passo4" class="card">
+      <div class="section-header">
+        <div>
+          <span class="step-badge">PASSO 4</span>
+          <h2>Algoritmo de Atendimento em Fila FIFO (First-In, First-Out)</h2>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="code-container">
+          <div class="code-header">
+            <span>algoritmo_fila_fifo.portugol</span>
+            <span>Pseudocódigo Estruturado</span>
+          </div>
+          <pre><code>ALGORITMO FilaAtendimentoClinicaVidaPlus
+TIPO
+    Paciente = REGISTRO
+        nome: CARACTERE
+        cpf: CARACTERE
+    FIM_REGISTRO
+
+VAR
+    fila: VETOR[1..10] DE Paciente
+    inicio, fim, i: INTEIRO
+    p1, p2, p3, atendido: Paciente
+
+INICIO
+    // Inicialização da fila vazia
+    inicio <- 1
+    fim <- 0
+
+    // 1. Inserção de três pacientes (Enqueue)
+    p1.nome <- "Mariana Costa";  p1.cpf <- "111.222.333-44"
+    fim <- fim + 1
+    fila[fim] <- p1
+
+    p2.nome <- "Carlos Mendes";  p2.cpf <- "222.333.444-55"
+    fim <- fim + 1
+    fila[fim] <- p2
+
+    p3.nome <- "Fernanda Alves"; p3.cpf <- "333.444.555-66"
+    fim <- fim + 1
+    fila[fim] <- p3
+
+    // 2. Remoção do primeiro paciente para atendimento (Dequeue)
+    SE inicio <= fim ENTAO
+        atendido <- fila[inicio]
+        inicio <- inicio + 1
+        ESCREVA("Em atendimento agora: ", atendido.nome, " - CPF: ", atendido.cpf)
+    FIM_SE
+
+    // 3. Exibição dos dois pacientes restantes na ordem correta
+    ESCREVA("Pacientes aguardando na fila:")
+    PARA i DE inicio ATE fim FACA
+        ESCREVA(i - inicio + 1, "º - ", fila[i].nome, " (CPF: ", fila[i].cpf, ")")
+    FIM_PARA
+FIM_ALGORITMO</code></pre>
+        </div>
+
+        <div>
+          <div class="info-box">
+            <h3>Explicação Conceitual (FIFO)</h3>
+            <p>
+              A estrutura de dados <strong>Fila (Queue)</strong> opera sob o princípio <strong>FIFO (First-In, First-Out)</strong> — o primeiro elemento inserido é obrigatoriamente o primeiro a ser removido. Na recepção da <strong>Clínica Vida+</strong>, isso garante justiça cronológica: ao inserir <em>Mariana</em>, <em>Carlos</em> e <em>Fernanda</em>, a primeira chamada remove <em>Mariana</em> (ponteiro <code>inicio</code> avança), mantendo <em>Carlos</em> em 1º lugar de espera e <em>Fernanda</em> em 2º lugar.
+            </p>
+          </div>
+
+          <!-- Simulador Visual da Fila FIFO -->
+          <div class="fifo-sim mt-15">
+            <h3>Demonstração Interativa da Fila</h3>
+            <div class="fifo-controls no-print">
+              <button id="btnFifoEnqueue3" class="btn btn-outline">1. Inserir 3 Pacientes</button>
+              <button id="btnFifoDequeue" class="btn btn-primary">2. Chamar 1º (Dequeue)</button>
+              <button id="btnFifoReset" class="btn btn-outline">Reiniciar</button>
+            </div>
+            <div id="fifoStatusText" class="fifo-status mt-10"></div>
+            <div id="fifoVisualList" class="fifo-cards mt-10"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PASSO 5: MODELAGEM UML — DIAGRAMA DE CASOS DE USO -->
+    <section id="passo5" class="card">
+      <div class="section-header">
+        <div>
+          <span class="step-badge">PASSO 5</span>
+          <h2>Diagrama de Casos de Uso UML — Gestão de Consultas</h2>
+        </div>
+      </div>
+
+      <p class="mb-15">
+        O diagrama abaixo representa os limites do <strong>Sistema de Gestão de Consultas — Clínica Vida+</strong>, os atores <strong>Secretária</strong> e <strong>Médico</strong>, suas associações diretas e os relacionamentos obrigatórios de inclusão (<code>&lt;&lt;include&gt;&gt;</code>).
+      </p>
+
+      <div class="uml-wrapper">
+        <svg viewBox="0 0 920 560" class="uml-svg" role="img" aria-label="Diagrama de Casos de Uso UML da Clínica Vida+">
+          <defs>
+            <marker id="arrowInclude" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+              <path d="M0,0 L0,6 L9,3 z" fill="#2563eb" />
+            </marker>
+          </defs>
+
+          <!-- Limite do Sistema -->
+          <rect x="210" y="25" width="500" height="510" rx="12" fill="#f8fafc" stroke="#1e293b" stroke-width="2.5" />
+          <text x="460" y="55" text-anchor="middle" font-weight="bold" font-size="16" fill="#0f172a">
+            Sistema de Gestão de Consultas — Clínica Vida+
+          </text>
+
+          <!-- ATOR 1: SECRETÁRIA (Esquerda) -->
+          <g transform="translate(80, 190)">
+            <circle cx="0" cy="0" r="18" fill="#ffffff" stroke="#0f172a" stroke-width="2.5" />
+            <line x1="0" y1="18" x2="0" y2="62" stroke="#0f172a" stroke-width="2.5" />
+            <line x1="-26" y1="34" x2="26" y2="34" stroke="#0f172a" stroke-width="2.5" />
+            <line x1="0" y1="62" x2="-22" y2="95" stroke="#0f172a" stroke-width="2.5" />
+            <line x1="0" y1="62" x2="22" y2="95" stroke="#0f172a" stroke-width="2.5" />
+            <text x="0" y="118" text-anchor="middle" font-weight="bold" font-size="15" fill="#0f172a">Secretária</text>
+          </g>
+
+          <!-- ATOR 2: MÉDICO (Direita) -->
+          <g transform="translate(840, 320)">
+            <circle cx="0" cy="0" r="18" fill="#ffffff" stroke="#0f172a" stroke-width="2.5" />
+            <line x1="0" y1="18" x2="0" y2="62" stroke="#0f172a" stroke-width="2.5" />
+            <line x1="-26" y1="34" x2="26" y2="34" stroke="#0f172a" stroke-width="2.5" />
+            <line x1="0" y1="62" x2="-22" y2="95" stroke="#0f172a" stroke-width="2.5" />
+            <line x1="0" y1="62" x2="22" y2="95" stroke="#0f172a" stroke-width="2.5" />
+            <text x="0" y="118" text-anchor="middle" font-weight="bold" font-size="15" fill="#0f172a">Médico</text>
+          </g>
+
+          <!-- CASOS DE USO (Elipses) -->
+          <!-- UC1: Cadastrar paciente -->
+          <ellipse cx="345" cy="105" rx="95" ry="28" fill="#ffffff" stroke="#0284c7" stroke-width="2" />
+          <text x="345" y="110" text-anchor="middle" font-size="13" font-weight="600" fill="#0f172a">Cadastrar paciente</text>
+
+          <!-- UC2: Agendar consulta -->
+          <ellipse cx="345" cy="185" rx="95" ry="28" fill="#ffffff" stroke="#0284c7" stroke-width="2" />
+          <text x="345" y="190" text-anchor="middle" font-size="13" font-weight="600" fill="#0f172a">Agendar consulta</text>
+
+          <!-- UC3: Confirmar consulta -->
+          <ellipse cx="345" cy="270" rx="95" ry="28" fill="#ffffff" stroke="#0284c7" stroke-width="2" />
+          <text x="345" y="275" text-anchor="middle" font-size="13" font-weight="600" fill="#0f172a">Confirmar consulta</text>
+
+          <!-- UC4: Verificar cadastro do paciente (Incluído) -->
+          <ellipse cx="590" cy="225" rx="105" ry="30" fill="#eff6ff" stroke="#2563eb" stroke-width="2" />
+          <text x="590" y="222" text-anchor="middle" font-size="12" font-weight="600" fill="#1e3a8a">Verificar cadastro</text>
+          <text x="590" y="238" text-anchor="middle" font-size="12" font-weight="600" fill="#1e3a8a">do paciente</text>
+
+          <!-- UC5: Cancelar consulta (Compartilhado) -->
+          <ellipse cx="460" cy="365" rx="95" ry="28" fill="#ffffff" stroke="#0284c7" stroke-width="2" />
+          <text x="460" y="370" text-anchor="middle" font-size="13" font-weight="600" fill="#0f172a">Cancelar consulta</text>
+
+          <!-- UC6: Gerar receita -->
+          <ellipse cx="585" cy="465" rx="90" ry="28" fill="#ffffff" stroke="#0284c7" stroke-width="2" />
+          <text x="585" y="470" text-anchor="middle" font-size="13" font-weight="600" fill="#0f172a">Gerar receita</text>
+
+          <!-- UC7: Imprimir receita (Incluído) -->
+          <ellipse cx="330" cy="465" rx="90" ry="28" fill="#eff6ff" stroke="#2563eb" stroke-width="2" />
+          <text x="330" y="470" text-anchor="middle" font-size="13" font-weight="600" fill="#1e3a8a">Imprimir receita</text>
+
+          <!-- ASSOCIAÇÕES DA SECRETÁRIA -->
+          <line x1="108" y1="220" x2="250" y2="105" stroke="#334155" stroke-width="1.8" />
+          <line x1="108" y1="225" x2="250" y2="185" stroke="#334155" stroke-width="1.8" />
+          <line x1="108" y1="235" x2="250" y2="270" stroke="#334155" stroke-width="1.8" />
+          <line x1="108" y1="245" x2="365" y2="365" stroke="#334155" stroke-width="1.8" />
+
+          <!-- ASSOCIAÇÕES DO MÉDICO -->
+          <line x1="812" y1="355" x2="555" y2="365" stroke="#334155" stroke-width="1.8" />
+          <line x1="812" y1="365" x2="675" y2="465" stroke="#334155" stroke-width="1.8" />
+
+          <!-- RELACIONAMENTOS <<include>> -->
+          <!-- Agendar consulta -> Verificar cadastro -->
+          <line x1="440" y1="185" x2="485" y2="215" stroke="#2563eb" stroke-width="1.8" stroke-dasharray="6,4" marker-end="url(#arrowInclude)" />
+          <text x="468" y="182" text-anchor="middle" font-size="11" font-weight="bold" fill="#2563eb">&lt;&lt;include&gt;&gt;</text>
+
+          <!-- Confirmar consulta -> Verificar cadastro -->
+          <line x1="440" y1="270" x2="485" y2="238" stroke="#2563eb" stroke-width="1.8" stroke-dasharray="6,4" marker-end="url(#arrowInclude)" />
+          <text x="472" y="275" text-anchor="middle" font-size="11" font-weight="bold" fill="#2563eb">&lt;&lt;include&gt;&gt;</text>
+
+          <!-- Gerar receita -> Imprimir receita -->
+          <line x1="495" y1="465" x2="423" y2="465" stroke="#2563eb" stroke-width="1.8" stroke-dasharray="6,4" marker-end="url(#arrowInclude)" />
+          <text x="458" y="454" text-anchor="middle" font-size="11" font-weight="bold" fill="#2563eb">&lt;&lt;include&gt;&gt;</text>
+        </svg>
+      </div>
+    </section>
+
+    <!-- CONCLUSÃO E REFERÊNCIAS -->
+    <section id="conclusao" class="card">
+      <h2>Conclusão e Referências Técnicas</h2>
+      <div class="grid-2 mt-15">
+        <div class="info-box">
+          <h3>Conclusão</h3>
+          <p>
+            A construção do projeto <strong>Clínica Vida+</strong> demonstrou a complementaridade entre gestão de projetos e fundamentos da computação. A organização por sprints viabilizou entregas rastreáveis; o módulo Python estruturou o controle cadastral com tratamento de falhas; as tabelas-verdade asseguraram rigor matemático nas decisões de triagem; a fila FIFO garantiu ordem justa no atendimento; e o diagrama UML consolidou os requisitos funcionais entre recepção e corpo médico.
+          </p>
+        </div>
+
+        <div class="info-box">
+          <h3>Referências e Ferramentas Utilizadas</h3>
+          <ul class="clean-list">
+            <li><strong>HTML5, CSS3 &amp; JavaScript (ES6+):</strong> Interface web responsiva, interatividade e geração dinâmica de tabelas e relatórios.</li>
+            <li><strong>Python 3.x:</strong> Implementação do sistema executável <code>clinica_vida.py</code> utilizando listas, dicionários e estruturas de repetição.</li>
+            <li><strong>Metodologia Kanban / Scrum:</strong> Inspiração visual no Trello para organização de backlog, sprints e retrospectivas.</li>
+            <li><strong>UML 2.5 (Unified Modeling Language):</strong> Especificação de atores, limites de sistema e relacionamentos <code>&lt;&lt;include&gt;&gt;</code>.</li>
+            <li><strong>Visual Studio Code &amp; Git/GitHub:</strong> Ambiente de desenvolvimento integrado e versionamento de código.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- MODAL PARA CRIAR/EDITAR TAREFA DO KANBAN -->
+  <div id="taskModal" class="modal hidden no-print" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle">Nova Tarefa</h3>
+        <button id="btnCloseModal" class="btn-icon" aria-label="Fechar">&times;</button>
+      </div>
+      <form id="taskForm">
+        <input type="hidden" id="taskId" />
+        <div class="form-group">
+          <label for="taskTitle">Título da Tarefa *</label>
+          <input type="text" id="taskTitle" class="input-control" required />
+        </div>
+        <div class="form-group">
+          <label for="taskDesc">Descrição</label>
+          <textarea id="taskDesc" class="input-control" rows="2"></textarea>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="taskStatus">Lista / Status</label>
+            <select id="taskStatus" class="input-control">
+              <option value="backlog">Backlog</option>
+              <option value="sprint">Sprint Atual</option>
+              <option value="progress">Em Progresso</option>
+              <option value="done">Concluído</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="taskDate">Data de Entrega</label>
+            <input type="date" id="taskDate" class="input-control" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="taskChecklist">Itens do Checklist (separados por vírgula)</label>
+          <input type="text" id="taskChecklist" class="input-control" placeholder="Ex: Criar função, Validar entrada, Testar" />
+        </div>
+        <div class="form-group">
+          <label for="taskComment">Adicionar Comentário</label>
+          <input type="text" id="taskComment" class="input-control" placeholder="Observação técnica opcional..." />
+        </div>
+        <div class="modal-actions">
+          <button type="button" id="btnCancelModal" class="btn btn-outline">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar Tarefa</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p>Clínica Vida+ — Projeto Acadêmico Completo • Dados fictícios exclusivamente para fins educacionais.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
